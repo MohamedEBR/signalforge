@@ -1,0 +1,226 @@
+{
+  "$defs": {
+    "Endpoint": {
+      "properties": {
+        "country": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Country"
+        },
+        "hostname": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hostname"
+        },
+        "ip": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ip"
+        },
+        "port": {
+          "anyOf": [
+            {
+              "maximum": 65535,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Port"
+        }
+      },
+      "title": "Endpoint",
+      "type": "object"
+    },
+    "Entity": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "title": "Entity",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "A deliberately small OCSF-inspired event envelope.",
+  "properties": {
+    "activity": {
+      "title": "Activity",
+      "type": "string"
+    },
+    "actor": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Entity"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "category": {
+      "title": "Category",
+      "type": "string"
+    },
+    "id": {
+      "maxLength": 256,
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "labels": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Labels",
+      "type": "array"
+    },
+    "observables": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          }
+        ]
+      },
+      "title": "Observables",
+      "type": "object"
+    },
+    "outcome": {
+      "default": "unknown",
+      "enum": [
+        "success",
+        "failure",
+        "unknown"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "raw_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Raw Ref"
+    },
+    "schema_version": {
+      "default": "signalforge.event.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "severity": {
+      "default": "informational",
+      "enum": [
+        "informational",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "source": {
+      "pattern": "^[a-z][a-z0-9_.-]+$",
+      "title": "Source",
+      "type": "string"
+    },
+    "source_endpoint": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Endpoint"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "target": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Entity"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "time": {
+      "format": "date-time",
+      "title": "Time",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "time",
+    "source",
+    "category",
+    "activity"
+  ],
+  "title": "SecurityEvent",
+  "type": "object"
+}

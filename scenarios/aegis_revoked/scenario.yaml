@@ -1,0 +1,9 @@
+name: Aegis workload use after revocation
+inputs: [events.jsonl]
+expected_rules: [SF-AEGIS-REVOKED-USE]
+forbidden_rules:
+  - SF-AWS-ACCESS-KEY-ROLE-CHAIN
+  - SF-ENTRA-CA-FAILURE-BURST
+  - SF-ENTRA-PRIVILEGE-SEQUENCE
+  - SF-NETWORK-AUTH-CORRELATION
+  - SF-SENTINELFLOW-CRITICAL

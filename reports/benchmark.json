@@ -1,0 +1,12 @@
+{
+  "schema_version": "signalforge.benchmark.v1",
+  "event_count": 25000,
+  "rule_count": 6,
+  "finding_count": 50,
+  "iterations": 7,
+  "median_ms": 198.165,
+  "p95_ms": 211.176,
+  "events_per_second": 126157.7,
+  "python": "3.13.13",
+  "platform": "Linux-7.0.3-arch1-2-x86_64-with-glibc2.43"
+}

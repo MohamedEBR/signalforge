@@ -1,0 +1,44 @@
+id: SF-ENTRA-PRIVILEGE-SEQUENCE
+version: 1
+name: Failed sign-in followed by privileged role change
+author: Mohamed Ebraheem
+description: Detects failed Conditional Access, a subsequent success, and a role membership change for the same identity.
+type: sequence
+severity: critical
+status: stable
+required_sources: [microsoft.entra]
+tactics: [InitialAccess, Persistence, PrivilegeEscalation]
+techniques: [T1078, T1098.003]
+false_positives:
+  - A privileged administrator resolves Conditional Access and completes an approved role change.
+group_by: [actor.id]
+window: 20m
+stages:
+  - name: conditional-access-failure
+    match:
+      sources: [microsoft.entra]
+      activities: [SignIn]
+      outcomes: [failure]
+  - name: sign-in-success
+    match:
+      sources: [microsoft.entra]
+      activities: [SignIn]
+      outcomes: [success]
+  - name: privileged-role-change
+    match:
+      sources: [microsoft.entra]
+      activities: [Add member to role]
+      outcomes: [success]
+runbook:
+  - Validate the successful sign-in's device, IP, and authentication method.
+  - Confirm the role change against an approved identity-governance request.
+  - Preserve sign-in and audit evidence before containment.
+responses:
+  - action: revoke_user_sessions
+    target_field: actor.id
+    description: Revoke user sessions after analyst approval.
+    approval_required: true
+  - action: remove_role_assignment
+    target_field: target.id
+    description: Remove the unexpected role assignment after confirming it is unauthorized.
+    approval_required: true

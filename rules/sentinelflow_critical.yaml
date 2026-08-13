@@ -1,0 +1,32 @@
+id: SF-SENTINELFLOW-CRITICAL
+version: 1
+name: Critical high-confidence network intrusion
+author: Mohamed Ebraheem
+description: Promotes a high-confidence and high-coverage SentinelFlow detection for immediate triage.
+type: match
+severity: high
+status: stable
+required_sources: [sentinelflow]
+tactics: [Reconnaissance]
+techniques: [T1595]
+false_positives:
+  - An approved vulnerability scanner produces behavior represented by the trained model.
+match:
+  sources: [sentinelflow]
+  outcomes: [success]
+  all:
+    - field: observables.score
+      op: gte
+      value: 0.97
+    - field: observables.feature_coverage
+      op: gte
+      value: 0.8
+runbook:
+  - Validate the model version, feature coverage, and local contribution explanation.
+  - Review neighboring connections for scan or command-and-control patterns.
+  - Correlate the source and destination with identity and cloud events.
+responses:
+  - action: isolate_source
+    target_field: source_endpoint.ip
+    description: Isolate or block the source only after validating the alert context.
+    approval_required: true

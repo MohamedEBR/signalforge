@@ -1,0 +1,33 @@
+id: SF-ENTRA-CA-FAILURE-BURST
+version: 1
+name: Repeated Conditional Access failures
+author: Mohamed Ebraheem
+description: Detects three failed Entra sign-ins for one user and source address within ten minutes.
+type: threshold
+severity: medium
+status: stable
+required_sources: [microsoft.entra]
+tactics: [CredentialAccess, InitialAccess]
+techniques: [T1110, T1078]
+false_positives:
+  - A user retries sign-in while enrolling a compliant device or changing networks.
+group_by: [actor.id, source_endpoint.ip]
+window: 10m
+threshold: 3
+match:
+  sources: [microsoft.entra]
+  activities: [SignIn]
+  outcomes: [failure]
+  all:
+    - field: observables.conditional_access
+      op: in
+      value: [failure, notAppliedFailure]
+runbook:
+  - Review authentication methods, device posture, and the failure reason.
+  - Compare the source address with the user's normal locations.
+  - Escalate if a success or privileged action follows the failures.
+responses:
+  - action: revoke_user_sessions
+    target_field: actor.id
+    description: Revoke active sessions only after confirming account compromise.
+    approval_required: true

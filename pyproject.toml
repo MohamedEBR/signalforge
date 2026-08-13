@@ -1,0 +1,42 @@
+[project]
+name = "signalforge"
+version = "0.1.0"
+description = "Cloud detection-as-code, deterministic replay, and explainable incident correlation"
+authors = [{ name = "Mohamed Ebraheem", email = "ebraheemohamed26@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "pydantic>=2.10.0,<3.0.0",
+    "PyYAML>=6.0.2,<7.0.0",
+]
+
+[project.scripts]
+signalforge = "signalforge.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0,<10.0.0",
+    "pytest-cov>=6.0.0,<8.0.0",
+    "ruff>=0.9.0,<1.0.0",
+    "black>=24.10.0,<27.0.0",
+    "pip-audit>=2.8.0,<3.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --cov=signalforge --cov-report=term-missing --cov-fail-under=85"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/signalforge"]

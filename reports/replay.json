@@ -1,0 +1,749 @@
+{
+  "schema_version": "signalforge.replay.v1",
+  "generated_at": "2026-08-13T22:58:37.013809Z",
+  "scenario_count": 5,
+  "passed_scenarios": 5,
+  "failed_scenarios": 0,
+  "true_positives": 6,
+  "false_positives": 0,
+  "false_negatives": 0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "median_engine_ms": 0.092,
+  "scenarios": [
+    {
+      "name": "Aegis workload use after revocation",
+      "event_count": 2,
+      "finding_count": 1,
+      "incident_count": 1,
+      "fired_rules": [
+        "SF-AEGIS-REVOKED-USE"
+      ],
+      "expected_rules": [
+        "SF-AEGIS-REVOKED-USE"
+      ],
+      "forbidden_rules": [
+        "SF-AWS-ACCESS-KEY-ROLE-CHAIN",
+        "SF-ENTRA-CA-FAILURE-BURST",
+        "SF-ENTRA-PRIVILEGE-SEQUENCE",
+        "SF-NETWORK-AUTH-CORRELATION",
+        "SF-SENTINELFLOW-CRITICAL"
+      ],
+      "passed": true,
+      "missing_rules": [],
+      "unexpected_rules": [],
+      "engine_ms": 0.092,
+      "findings": [
+        {
+          "schema_version": "signalforge.finding.v1",
+          "id": "FND-45DF8F58DEE5662F5E52",
+          "rule_id": "SF-AEGIS-REVOKED-USE",
+          "rule_version": 1,
+          "rule_name": "Workload activity after revocation",
+          "severity": "critical",
+          "first_seen": "2026-08-13T17:00:00Z",
+          "last_seen": "2026-08-13T17:04:00Z",
+          "detected_at": "2026-08-13T22:58:37.011178Z",
+          "group": [
+            "spiffe://aegis.local/ns/payments/sa/worker"
+          ],
+          "matched_event_ids": [
+            "AEGIS-CB63C94E5FE90E6D3B20",
+            "AEGIS-E1DED7D05F4B9FDBFD7F"
+          ],
+          "evidence": [
+            "2026-08-13T17:00:00+00:00 aegis.audit:workload_change outcome=success event=AEGIS-CB63C94E5FE90E6D3B20",
+            "2026-08-13T17:04:00+00:00 aegis.audit:token_exchange outcome=failure event=AEGIS-E1DED7D05F4B9FDBFD7F"
+          ],
+          "entities": [
+            {
+              "type": "workload",
+              "id": "spiffe://aegis.local/ns/payments/sa/worker",
+              "name": null
+            },
+            {
+              "type": "resource",
+              "id": "spiffe://aegis.local/ns/payments/sa/worker",
+              "name": null
+            },
+            {
+              "type": "resource",
+              "id": "ledger-api",
+              "name": null
+            }
+          ],
+          "tactics": [
+            "CredentialAccess",
+            "Persistence"
+          ],
+          "techniques": [
+            "T1550.001",
+            "T1078"
+          ],
+          "runbook": [
+            "Confirm the revocation and token-exchange event refer to the same workload identity.",
+            "Inspect the source host for stale credentials or compromise.",
+            "Preserve Aegis audit-chain evidence and rotate related workload certificates."
+          ]
+        }
+      ],
+      "incidents": [
+        {
+          "schema_version": "signalforge.incident.v1",
+          "id": "INC-8EA2C6B80067A1F5C651",
+          "title": "Workload activity after revocation",
+          "severity": "critical",
+          "confidence": 0.68,
+          "first_seen": "2026-08-13T17:00:00Z",
+          "last_seen": "2026-08-13T17:04:00Z",
+          "finding_ids": [
+            "FND-45DF8F58DEE5662F5E52"
+          ],
+          "rule_ids": [
+            "SF-AEGIS-REVOKED-USE"
+          ],
+          "entities": [
+            {
+              "type": "workload",
+              "id": "spiffe://aegis.local/ns/payments/sa/worker",
+              "name": null
+            },
+            {
+              "type": "resource",
+              "id": "spiffe://aegis.local/ns/payments/sa/worker",
+              "name": null
+            },
+            {
+              "type": "resource",
+              "id": "ledger-api",
+              "name": null
+            }
+          ],
+          "evidence": [
+            "2026-08-13T17:00:00+00:00 aegis.audit:workload_change outcome=success event=AEGIS-CB63C94E5FE90E6D3B20",
+            "2026-08-13T17:04:00+00:00 aegis.audit:token_exchange outcome=failure event=AEGIS-E1DED7D05F4B9FDBFD7F"
+          ],
+          "timeline": [
+            "2026-08-13T17:00:00+00:00 — aegis.audit workload_change (success) [AEGIS-CB63C94E5FE90E6D3B20]",
+            "2026-08-13T17:04:00+00:00 — aegis.audit token_exchange (failure) [AEGIS-E1DED7D05F4B9FDBFD7F]"
+          ],
+          "tactics": [
+            "CredentialAccess",
+            "Persistence"
+          ],
+          "techniques": [
+            "T1550.001",
+            "T1078"
+          ],
+          "response_plans": [
+            {
+              "action": "rotate_workload_certificate",
+              "target": "spiffe://aegis.local/ns/payments/sa/worker",
+              "description": "Rotate the workload certificate after analyst approval and host investigation.",
+              "status": "pending_approval",
+              "executable": false
+            }
+          ],
+          "explanation": "SignalForge correlated 1 finding(s) from 1 source(s) around workload:spiffe://aegis.local/ns/payments/sa/worker, resource:spiffe://aegis.local/ns/payments/sa/worker, resource:ledger-api. The evidence spans 2 ordered event(s); proposed actions remain non-executable pending explicit human approval."
+        }
+      ]
+    },
+    {
+      "name": "AWS access key then cross-role activity",
+      "event_count": 2,
+      "finding_count": 1,
+      "incident_count": 1,
+      "fired_rules": [
+        "SF-AWS-ACCESS-KEY-ROLE-CHAIN"
+      ],
+      "expected_rules": [
+        "SF-AWS-ACCESS-KEY-ROLE-CHAIN"
+      ],
+      "forbidden_rules": [
+        "SF-AEGIS-REVOKED-USE",
+        "SF-ENTRA-CA-FAILURE-BURST",
+        "SF-ENTRA-PRIVILEGE-SEQUENCE",
+        "SF-NETWORK-AUTH-CORRELATION",
+        "SF-SENTINELFLOW-CRITICAL"
+      ],
+      "passed": true,
+      "missing_rules": [],
+      "unexpected_rules": [],
+      "engine_ms": 0.108,
+      "findings": [
+        {
+          "schema_version": "signalforge.finding.v1",
+          "id": "FND-A746C3E2AFDBFFC6775E",
+          "rule_id": "SF-AWS-ACCESS-KEY-ROLE-CHAIN",
+          "rule_version": 1,
+          "rule_name": "New access key followed by role assumption",
+          "severity": "high",
+          "first_seen": "2026-08-13T14:00:00Z",
+          "last_seen": "2026-08-13T14:05:00Z",
+          "detected_at": "2026-08-13T22:58:37.011813Z",
+          "group": [
+            "arn:aws:iam::111122223333:user/alice"
+          ],
+          "matched_event_ids": [
+            "aws-key-1",
+            "aws-role-1"
+          ],
+          "evidence": [
+            "2026-08-13T14:00:00+00:00 aws.cloudtrail:CreateAccessKey outcome=success event=aws-key-1",
+            "2026-08-13T14:05:00+00:00 aws.cloudtrail:AssumeRole outcome=success event=aws-role-1"
+          ],
+          "entities": [
+            {
+              "type": "cloud_principal",
+              "id": "arn:aws:iam::111122223333:user/alice",
+              "name": null
+            },
+            {
+              "type": "aws_account",
+              "id": "111122223333",
+              "name": null
+            },
+            {
+              "type": "ip",
+              "id": "198.51.100.24",
+              "name": null
+            },
+            {
+              "type": "aws_account",
+              "id": "444455556666",
+              "name": null
+            }
+          ],
+          "tactics": [
+            "Persistence",
+            "PrivilegeEscalation"
+          ],
+          "techniques": [
+            "T1098",
+            "T1078.004"
+          ],
+          "runbook": [
+            "Confirm who requested the access key and whether a ticket/change window exists.",
+            "Compare the source IP and target role with the principal's prior activity.",
+            "Rotate or deactivate the new key if ownership cannot be established."
+          ]
+        }
+      ],
+      "incidents": [
+        {
+          "schema_version": "signalforge.incident.v1",
+          "id": "INC-7218F029216C16E2D69C",
+          "title": "New access key followed by role assumption",
+          "severity": "high",
+          "confidence": 0.68,
+          "first_seen": "2026-08-13T14:00:00Z",
+          "last_seen": "2026-08-13T14:05:00Z",
+          "finding_ids": [
+            "FND-A746C3E2AFDBFFC6775E"
+          ],
+          "rule_ids": [
+            "SF-AWS-ACCESS-KEY-ROLE-CHAIN"
+          ],
+          "entities": [
+            {
+              "type": "cloud_principal",
+              "id": "arn:aws:iam::111122223333:user/alice",
+              "name": null
+            },
+            {
+              "type": "aws_account",
+              "id": "111122223333",
+              "name": null
+            },
+            {
+              "type": "ip",
+              "id": "198.51.100.24",
+              "name": null
+            },
+            {
+              "type": "aws_account",
+              "id": "444455556666",
+              "name": null
+            }
+          ],
+          "evidence": [
+            "2026-08-13T14:00:00+00:00 aws.cloudtrail:CreateAccessKey outcome=success event=aws-key-1",
+            "2026-08-13T14:05:00+00:00 aws.cloudtrail:AssumeRole outcome=success event=aws-role-1"
+          ],
+          "timeline": [
+            "2026-08-13T14:00:00+00:00 — aws.cloudtrail CreateAccessKey (success) [aws-key-1]",
+            "2026-08-13T14:05:00+00:00 — aws.cloudtrail AssumeRole (success) [aws-role-1]"
+          ],
+          "tactics": [
+            "Persistence",
+            "PrivilegeEscalation"
+          ],
+          "techniques": [
+            "T1098",
+            "T1078.004"
+          ],
+          "response_plans": [
+            {
+              "action": "deactivate_access_key",
+              "target": "AKIASYNTHETIC0001",
+              "description": "Deactivate the newly created key after an analyst confirms compromise.",
+              "status": "pending_approval",
+              "executable": false
+            }
+          ],
+          "explanation": "SignalForge correlated 1 finding(s) from 1 source(s) around cloud_principal:arn:aws:iam::111122223333:user/alice, aws_account:111122223333, aws_account:444455556666. The evidence spans 2 ordered event(s); proposed actions remain non-executable pending explicit human approval."
+        }
+      ]
+    },
+    {
+      "name": "Expected automation and normal sign-in",
+      "event_count": 3,
+      "finding_count": 0,
+      "incident_count": 0,
+      "fired_rules": [],
+      "expected_rules": [],
+      "forbidden_rules": [
+        "SF-AEGIS-REVOKED-USE",
+        "SF-AWS-ACCESS-KEY-ROLE-CHAIN",
+        "SF-ENTRA-CA-FAILURE-BURST",
+        "SF-ENTRA-PRIVILEGE-SEQUENCE",
+        "SF-NETWORK-AUTH-CORRELATION",
+        "SF-SENTINELFLOW-CRITICAL"
+      ],
+      "passed": true,
+      "missing_rules": [],
+      "unexpected_rules": [],
+      "engine_ms": 0.046,
+      "findings": [],
+      "incidents": []
+    },
+    {
+      "name": "Entra failures followed by role escalation",
+      "event_count": 5,
+      "finding_count": 2,
+      "incident_count": 1,
+      "fired_rules": [
+        "SF-ENTRA-CA-FAILURE-BURST",
+        "SF-ENTRA-PRIVILEGE-SEQUENCE"
+      ],
+      "expected_rules": [
+        "SF-ENTRA-CA-FAILURE-BURST",
+        "SF-ENTRA-PRIVILEGE-SEQUENCE"
+      ],
+      "forbidden_rules": [
+        "SF-AEGIS-REVOKED-USE",
+        "SF-AWS-ACCESS-KEY-ROLE-CHAIN",
+        "SF-NETWORK-AUTH-CORRELATION",
+        "SF-SENTINELFLOW-CRITICAL"
+      ],
+      "passed": true,
+      "missing_rules": [],
+      "unexpected_rules": [],
+      "engine_ms": 0.109,
+      "findings": [
+        {
+          "schema_version": "signalforge.finding.v1",
+          "id": "FND-1F3B4687105AC2C751E7",
+          "rule_id": "SF-ENTRA-CA-FAILURE-BURST",
+          "rule_version": 1,
+          "rule_name": "Repeated Conditional Access failures",
+          "severity": "medium",
+          "first_seen": "2026-08-13T15:00:00Z",
+          "last_seen": "2026-08-13T15:04:00Z",
+          "detected_at": "2026-08-13T22:58:37.013023Z",
+          "group": [
+            "alice@example.test",
+            "203.0.113.77"
+          ],
+          "matched_event_ids": [
+            "entra-fail-1",
+            "entra-fail-2",
+            "entra-fail-3"
+          ],
+          "evidence": [
+            "2026-08-13T15:00:00+00:00 microsoft.entra:SignIn outcome=failure event=entra-fail-1",
+            "2026-08-13T15:02:00+00:00 microsoft.entra:SignIn outcome=failure event=entra-fail-2",
+            "2026-08-13T15:04:00+00:00 microsoft.entra:SignIn outcome=failure event=entra-fail-3"
+          ],
+          "entities": [
+            {
+              "type": "user",
+              "id": "alice@example.test",
+              "name": "alice@example.test"
+            },
+            {
+              "type": "entra_resource",
+              "id": "Azure Portal",
+              "name": null
+            },
+            {
+              "type": "ip",
+              "id": "203.0.113.77",
+              "name": null
+            }
+          ],
+          "tactics": [
+            "CredentialAccess",
+            "InitialAccess"
+          ],
+          "techniques": [
+            "T1110",
+            "T1078"
+          ],
+          "runbook": [
+            "Review authentication methods, device posture, and the failure reason.",
+            "Compare the source address with the user's normal locations.",
+            "Escalate if a success or privileged action follows the failures."
+          ]
+        },
+        {
+          "schema_version": "signalforge.finding.v1",
+          "id": "FND-31DBB1B97D89BB4C15C3",
+          "rule_id": "SF-ENTRA-PRIVILEGE-SEQUENCE",
+          "rule_version": 1,
+          "rule_name": "Failed sign-in followed by privileged role change",
+          "severity": "critical",
+          "first_seen": "2026-08-13T15:00:00Z",
+          "last_seen": "2026-08-13T15:09:00Z",
+          "detected_at": "2026-08-13T22:58:37.013023Z",
+          "group": [
+            "alice@example.test"
+          ],
+          "matched_event_ids": [
+            "entra-fail-1",
+            "entra-success-1",
+            "entra-role-1"
+          ],
+          "evidence": [
+            "2026-08-13T15:00:00+00:00 microsoft.entra:SignIn outcome=failure event=entra-fail-1",
+            "2026-08-13T15:06:00+00:00 microsoft.entra:SignIn outcome=success event=entra-success-1",
+            "2026-08-13T15:09:00+00:00 microsoft.entra:Add member to role outcome=success event=entra-role-1"
+          ],
+          "entities": [
+            {
+              "type": "user",
+              "id": "alice@example.test",
+              "name": "alice@example.test"
+            },
+            {
+              "type": "entra_resource",
+              "id": "Azure Portal",
+              "name": null
+            },
+            {
+              "type": "ip",
+              "id": "203.0.113.77",
+              "name": null
+            },
+            {
+              "type": "entra_resource",
+              "id": "Global Administrator",
+              "name": null
+            }
+          ],
+          "tactics": [
+            "InitialAccess",
+            "Persistence",
+            "PrivilegeEscalation"
+          ],
+          "techniques": [
+            "T1078",
+            "T1098.003"
+          ],
+          "runbook": [
+            "Validate the successful sign-in's device, IP, and authentication method.",
+            "Confirm the role change against an approved identity-governance request.",
+            "Preserve sign-in and audit evidence before containment."
+          ]
+        }
+      ],
+      "incidents": [
+        {
+          "schema_version": "signalforge.incident.v1",
+          "id": "INC-0158243E87EFEBCC4E42",
+          "title": "Repeated Conditional Access failures / Failed sign-in followed by privileged role change",
+          "severity": "critical",
+          "confidence": 0.76,
+          "first_seen": "2026-08-13T15:00:00Z",
+          "last_seen": "2026-08-13T15:09:00Z",
+          "finding_ids": [
+            "FND-1F3B4687105AC2C751E7",
+            "FND-31DBB1B97D89BB4C15C3"
+          ],
+          "rule_ids": [
+            "SF-ENTRA-CA-FAILURE-BURST",
+            "SF-ENTRA-PRIVILEGE-SEQUENCE"
+          ],
+          "entities": [
+            {
+              "type": "user",
+              "id": "alice@example.test",
+              "name": "alice@example.test"
+            },
+            {
+              "type": "entra_resource",
+              "id": "Azure Portal",
+              "name": null
+            },
+            {
+              "type": "ip",
+              "id": "203.0.113.77",
+              "name": null
+            },
+            {
+              "type": "entra_resource",
+              "id": "Global Administrator",
+              "name": null
+            }
+          ],
+          "evidence": [
+            "2026-08-13T15:00:00+00:00 microsoft.entra:SignIn outcome=failure event=entra-fail-1",
+            "2026-08-13T15:02:00+00:00 microsoft.entra:SignIn outcome=failure event=entra-fail-2",
+            "2026-08-13T15:04:00+00:00 microsoft.entra:SignIn outcome=failure event=entra-fail-3",
+            "2026-08-13T15:00:00+00:00 microsoft.entra:SignIn outcome=failure event=entra-fail-1",
+            "2026-08-13T15:06:00+00:00 microsoft.entra:SignIn outcome=success event=entra-success-1",
+            "2026-08-13T15:09:00+00:00 microsoft.entra:Add member to role outcome=success event=entra-role-1"
+          ],
+          "timeline": [
+            "2026-08-13T15:00:00+00:00 — microsoft.entra SignIn (failure) [entra-fail-1]",
+            "2026-08-13T15:02:00+00:00 — microsoft.entra SignIn (failure) [entra-fail-2]",
+            "2026-08-13T15:04:00+00:00 — microsoft.entra SignIn (failure) [entra-fail-3]",
+            "2026-08-13T15:06:00+00:00 — microsoft.entra SignIn (success) [entra-success-1]",
+            "2026-08-13T15:09:00+00:00 — microsoft.entra Add member to role (success) [entra-role-1]"
+          ],
+          "tactics": [
+            "CredentialAccess",
+            "InitialAccess",
+            "Persistence",
+            "PrivilegeEscalation"
+          ],
+          "techniques": [
+            "T1110",
+            "T1078",
+            "T1098.003"
+          ],
+          "response_plans": [
+            {
+              "action": "revoke_user_sessions",
+              "target": "alice@example.test",
+              "description": "Revoke active sessions only after confirming account compromise.",
+              "status": "pending_approval",
+              "executable": false
+            },
+            {
+              "action": "remove_role_assignment",
+              "target": "Global Administrator",
+              "description": "Remove the unexpected role assignment after confirming it is unauthorized.",
+              "status": "pending_approval",
+              "executable": false
+            }
+          ],
+          "explanation": "SignalForge correlated 2 finding(s) from 1 source(s) around user:alice@example.test, entra_resource:Azure Portal, entra_resource:Global Administrator. The evidence spans 5 ordered event(s); proposed actions remain non-executable pending explicit human approval."
+        }
+      ]
+    },
+    {
+      "name": "SentinelFlow intrusion plus API abuse",
+      "event_count": 3,
+      "finding_count": 2,
+      "incident_count": 1,
+      "fired_rules": [
+        "SF-NETWORK-AUTH-CORRELATION",
+        "SF-SENTINELFLOW-CRITICAL"
+      ],
+      "expected_rules": [
+        "SF-NETWORK-AUTH-CORRELATION",
+        "SF-SENTINELFLOW-CRITICAL"
+      ],
+      "forbidden_rules": [
+        "SF-AEGIS-REVOKED-USE",
+        "SF-AWS-ACCESS-KEY-ROLE-CHAIN",
+        "SF-ENTRA-CA-FAILURE-BURST",
+        "SF-ENTRA-PRIVILEGE-SEQUENCE"
+      ],
+      "passed": true,
+      "missing_rules": [],
+      "unexpected_rules": [],
+      "engine_ms": 0.08,
+      "findings": [
+        {
+          "schema_version": "signalforge.finding.v1",
+          "id": "FND-1CE22B03BF89C9B878B7",
+          "rule_id": "SF-NETWORK-AUTH-CORRELATION",
+          "rule_version": 1,
+          "rule_name": "Network intrusion correlated with API authentication abuse",
+          "severity": "critical",
+          "first_seen": "2026-08-13T16:00:00Z",
+          "last_seen": "2026-08-13T16:02:00Z",
+          "detected_at": "2026-08-13T22:58:37.013673Z",
+          "group": [
+            "198.51.100.88"
+          ],
+          "matched_event_ids": [
+            "NIDS-SYNTHETIC0001",
+            "api-fail-1",
+            "api-fail-2"
+          ],
+          "evidence": [
+            "2026-08-13T16:00:00+00:00 sentinelflow:NetworkIntrusion:Reconnaissance outcome=success event=NIDS-SYNTHETIC0001",
+            "2026-08-13T16:01:00+00:00 application.auth:ApiAuthentication outcome=failure event=api-fail-1",
+            "2026-08-13T16:02:00+00:00 application.auth:ApiAuthentication outcome=failure event=api-fail-2"
+          ],
+          "entities": [
+            {
+              "type": "ip",
+              "id": "198.51.100.88",
+              "name": null
+            },
+            {
+              "type": "network_endpoint",
+              "id": "10.10.0.20",
+              "name": null
+            },
+            {
+              "type": "api_principal",
+              "id": "unknown-api-key",
+              "name": null
+            },
+            {
+              "type": "api",
+              "id": "payments-api",
+              "name": null
+            }
+          ],
+          "tactics": [
+            "Reconnaissance",
+            "CredentialAccess"
+          ],
+          "techniques": [
+            "T1595",
+            "T1110"
+          ],
+          "runbook": [
+            "Inspect the SentinelFlow feature attribution and destination service.",
+            "Review failed API credentials and rate-limit decisions for the source address.",
+            "Search for successful authentication or lateral movement from the same entity."
+          ]
+        },
+        {
+          "schema_version": "signalforge.finding.v1",
+          "id": "FND-F6AE206AA280E5DA5F68",
+          "rule_id": "SF-SENTINELFLOW-CRITICAL",
+          "rule_version": 1,
+          "rule_name": "Critical high-confidence network intrusion",
+          "severity": "high",
+          "first_seen": "2026-08-13T16:00:00Z",
+          "last_seen": "2026-08-13T16:00:00Z",
+          "detected_at": "2026-08-13T22:58:37.013673Z",
+          "group": [],
+          "matched_event_ids": [
+            "NIDS-SYNTHETIC0001"
+          ],
+          "evidence": [
+            "2026-08-13T16:00:00+00:00 sentinelflow:NetworkIntrusion:Reconnaissance outcome=success event=NIDS-SYNTHETIC0001"
+          ],
+          "entities": [
+            {
+              "type": "ip",
+              "id": "198.51.100.88",
+              "name": null
+            },
+            {
+              "type": "network_endpoint",
+              "id": "10.10.0.20",
+              "name": null
+            }
+          ],
+          "tactics": [
+            "Reconnaissance"
+          ],
+          "techniques": [
+            "T1595"
+          ],
+          "runbook": [
+            "Validate the model version, feature coverage, and local contribution explanation.",
+            "Review neighboring connections for scan or command-and-control patterns.",
+            "Correlate the source and destination with identity and cloud events."
+          ]
+        }
+      ],
+      "incidents": [
+        {
+          "schema_version": "signalforge.incident.v1",
+          "id": "INC-5748C20FFACA4A4BF1F9",
+          "title": "Network intrusion correlated with API authentication abuse / Critical high-confidence network intrusion",
+          "severity": "critical",
+          "confidence": 0.81,
+          "first_seen": "2026-08-13T16:00:00Z",
+          "last_seen": "2026-08-13T16:02:00Z",
+          "finding_ids": [
+            "FND-1CE22B03BF89C9B878B7",
+            "FND-F6AE206AA280E5DA5F68"
+          ],
+          "rule_ids": [
+            "SF-NETWORK-AUTH-CORRELATION",
+            "SF-SENTINELFLOW-CRITICAL"
+          ],
+          "entities": [
+            {
+              "type": "ip",
+              "id": "198.51.100.88",
+              "name": null
+            },
+            {
+              "type": "network_endpoint",
+              "id": "10.10.0.20",
+              "name": null
+            },
+            {
+              "type": "api_principal",
+              "id": "unknown-api-key",
+              "name": null
+            },
+            {
+              "type": "api",
+              "id": "payments-api",
+              "name": null
+            }
+          ],
+          "evidence": [
+            "2026-08-13T16:00:00+00:00 sentinelflow:NetworkIntrusion:Reconnaissance outcome=success event=NIDS-SYNTHETIC0001",
+            "2026-08-13T16:01:00+00:00 application.auth:ApiAuthentication outcome=failure event=api-fail-1",
+            "2026-08-13T16:02:00+00:00 application.auth:ApiAuthentication outcome=failure event=api-fail-2",
+            "2026-08-13T16:00:00+00:00 sentinelflow:NetworkIntrusion:Reconnaissance outcome=success event=NIDS-SYNTHETIC0001"
+          ],
+          "timeline": [
+            "2026-08-13T16:00:00+00:00 — sentinelflow NetworkIntrusion:Reconnaissance (success) [NIDS-SYNTHETIC0001]",
+            "2026-08-13T16:01:00+00:00 — application.auth ApiAuthentication (failure) [api-fail-1]",
+            "2026-08-13T16:02:00+00:00 — application.auth ApiAuthentication (failure) [api-fail-2]"
+          ],
+          "tactics": [
+            "Reconnaissance",
+            "CredentialAccess"
+          ],
+          "techniques": [
+            "T1595",
+            "T1110"
+          ],
+          "response_plans": [
+            {
+              "action": "block_source_ip",
+              "target": "198.51.100.88",
+              "description": "Add a temporary edge block only after analyst validation.",
+              "status": "pending_approval",
+              "executable": false
+            },
+            {
+              "action": "isolate_source",
+              "target": "198.51.100.88",
+              "description": "Isolate or block the source only after validating the alert context.",
+              "status": "pending_approval",
+              "executable": false
+            }
+          ],
+          "explanation": "SignalForge correlated 2 finding(s) from 2 source(s) around network_endpoint:10.10.0.20, api_principal:unknown-api-key, api:payments-api. The evidence spans 3 ordered event(s); proposed actions remain non-executable pending explicit human approval."
+        }
+      ]
+    }
+  ]
+}

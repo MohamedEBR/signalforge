@@ -1,0 +1,482 @@
+{
+  "$defs": {
+    "Entity": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "title": "Entity",
+      "type": "object"
+    },
+    "Finding": {
+      "properties": {
+        "detected_at": {
+          "format": "date-time",
+          "title": "Detected At",
+          "type": "string"
+        },
+        "entities": {
+          "items": {
+            "$ref": "#/$defs/Entity"
+          },
+          "title": "Entities",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "first_seen": {
+          "format": "date-time",
+          "title": "First Seen",
+          "type": "string"
+        },
+        "group": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Group",
+          "type": "array"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "last_seen": {
+          "format": "date-time",
+          "title": "Last Seen",
+          "type": "string"
+        },
+        "matched_event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Matched Event Ids",
+          "type": "array"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_name": {
+          "title": "Rule Name",
+          "type": "string"
+        },
+        "rule_version": {
+          "title": "Rule Version",
+          "type": "integer"
+        },
+        "runbook": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Runbook",
+          "type": "array"
+        },
+        "schema_version": {
+          "default": "signalforge.finding.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "informational",
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "tactics": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tactics",
+          "type": "array"
+        },
+        "techniques": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Techniques",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "rule_id",
+        "rule_version",
+        "rule_name",
+        "severity",
+        "first_seen",
+        "last_seen",
+        "detected_at",
+        "group",
+        "matched_event_ids",
+        "evidence",
+        "entities",
+        "tactics",
+        "techniques",
+        "runbook"
+      ],
+      "title": "Finding",
+      "type": "object"
+    },
+    "Incident": {
+      "properties": {
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "entities": {
+          "items": {
+            "$ref": "#/$defs/Entity"
+          },
+          "title": "Entities",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "explanation": {
+          "title": "Explanation",
+          "type": "string"
+        },
+        "finding_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Finding Ids",
+          "type": "array"
+        },
+        "first_seen": {
+          "format": "date-time",
+          "title": "First Seen",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "last_seen": {
+          "format": "date-time",
+          "title": "Last Seen",
+          "type": "string"
+        },
+        "response_plans": {
+          "items": {
+            "$ref": "#/$defs/ResponsePlan"
+          },
+          "title": "Response Plans",
+          "type": "array"
+        },
+        "rule_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Rule Ids",
+          "type": "array"
+        },
+        "schema_version": {
+          "default": "signalforge.incident.v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "informational",
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "tactics": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tactics",
+          "type": "array"
+        },
+        "techniques": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Techniques",
+          "type": "array"
+        },
+        "timeline": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Timeline",
+          "type": "array"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "severity",
+        "confidence",
+        "first_seen",
+        "last_seen",
+        "finding_ids",
+        "rule_ids",
+        "entities",
+        "evidence",
+        "timeline",
+        "tactics",
+        "techniques",
+        "response_plans",
+        "explanation"
+      ],
+      "title": "Incident",
+      "type": "object"
+    },
+    "ResponsePlan": {
+      "properties": {
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "executable": {
+          "const": false,
+          "default": false,
+          "title": "Executable",
+          "type": "boolean"
+        },
+        "status": {
+          "const": "pending_approval",
+          "default": "pending_approval",
+          "title": "Status",
+          "type": "string"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Target"
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "description"
+      ],
+      "title": "ResponsePlan",
+      "type": "object"
+    },
+    "ScenarioResult": {
+      "properties": {
+        "engine_ms": {
+          "title": "Engine Ms",
+          "type": "number"
+        },
+        "event_count": {
+          "title": "Event Count",
+          "type": "integer"
+        },
+        "expected_rules": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Expected Rules",
+          "type": "array"
+        },
+        "finding_count": {
+          "title": "Finding Count",
+          "type": "integer"
+        },
+        "findings": {
+          "items": {
+            "$ref": "#/$defs/Finding"
+          },
+          "title": "Findings",
+          "type": "array"
+        },
+        "fired_rules": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Fired Rules",
+          "type": "array"
+        },
+        "forbidden_rules": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Rules",
+          "type": "array"
+        },
+        "incident_count": {
+          "title": "Incident Count",
+          "type": "integer"
+        },
+        "incidents": {
+          "items": {
+            "$ref": "#/$defs/Incident"
+          },
+          "title": "Incidents",
+          "type": "array"
+        },
+        "missing_rules": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Rules",
+          "type": "array"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "unexpected_rules": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Unexpected Rules",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "event_count",
+        "finding_count",
+        "incident_count",
+        "fired_rules",
+        "expected_rules",
+        "forbidden_rules",
+        "passed",
+        "missing_rules",
+        "unexpected_rules",
+        "engine_ms",
+        "findings",
+        "incidents"
+      ],
+      "title": "ScenarioResult",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "failed_scenarios": {
+      "title": "Failed Scenarios",
+      "type": "integer"
+    },
+    "false_negatives": {
+      "title": "False Negatives",
+      "type": "integer"
+    },
+    "false_positives": {
+      "title": "False Positives",
+      "type": "integer"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "median_engine_ms": {
+      "title": "Median Engine Ms",
+      "type": "number"
+    },
+    "passed_scenarios": {
+      "title": "Passed Scenarios",
+      "type": "integer"
+    },
+    "precision": {
+      "title": "Precision",
+      "type": "number"
+    },
+    "recall": {
+      "title": "Recall",
+      "type": "number"
+    },
+    "scenario_count": {
+      "title": "Scenario Count",
+      "type": "integer"
+    },
+    "scenarios": {
+      "items": {
+        "$ref": "#/$defs/ScenarioResult"
+      },
+      "title": "Scenarios",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "signalforge.replay.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "true_positives": {
+      "title": "True Positives",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "generated_at",
+    "scenario_count",
+    "passed_scenarios",
+    "failed_scenarios",
+    "true_positives",
+    "false_positives",
+    "false_negatives",
+    "precision",
+    "recall",
+    "median_engine_ms",
+    "scenarios"
+  ],
+  "title": "ReplayReport",
+  "type": "object"
+}

@@ -1,0 +1,46 @@
+id: SF-NETWORK-AUTH-CORRELATION
+version: 1
+name: Network intrusion correlated with API authentication abuse
+author: Mohamed Ebraheem
+description: Correlates a high-confidence SentinelFlow alert with repeated API authentication failures from the same source.
+type: sequence
+severity: critical
+status: stable
+required_sources: [sentinelflow, application.auth]
+tactics: [Reconnaissance, CredentialAccess]
+techniques: [T1595, T1110]
+false_positives:
+  - An authorized penetration test targets the API from the same scanner address.
+group_by: [source_endpoint.ip]
+window: 10m
+stages:
+  - name: network-alert
+    match:
+      sources: [sentinelflow]
+      outcomes: [success]
+      all:
+        - field: observables.score
+          op: gte
+          value: 0.9
+        - field: observables.feature_coverage
+          op: gte
+          value: 0.8
+  - name: api-auth-failure-one
+    match:
+      sources: [application.auth]
+      activities: [ApiAuthentication]
+      outcomes: [failure]
+  - name: api-auth-failure-two
+    match:
+      sources: [application.auth]
+      activities: [ApiAuthentication]
+      outcomes: [failure]
+runbook:
+  - Inspect the SentinelFlow feature attribution and destination service.
+  - Review failed API credentials and rate-limit decisions for the source address.
+  - Search for successful authentication or lateral movement from the same entity.
+responses:
+  - action: block_source_ip
+    target_field: source_endpoint.ip
+    description: Add a temporary edge block only after analyst validation.
+    approval_required: true

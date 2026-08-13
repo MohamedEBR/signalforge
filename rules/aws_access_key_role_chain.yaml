@@ -1,0 +1,43 @@
+id: SF-AWS-ACCESS-KEY-ROLE-CHAIN
+version: 1
+name: New access key followed by role assumption
+author: Mohamed Ebraheem
+description: Detects a principal creating an access key and then assuming a role within fifteen minutes.
+type: sequence
+severity: high
+status: stable
+required_sources: [aws.cloudtrail]
+tactics: [Persistence, PrivilegeEscalation]
+techniques: [T1098, T1078.004]
+false_positives:
+  - Approved administrator onboarding or credential rotation followed by role validation.
+group_by: [actor.id]
+window: 15m
+stages:
+  - name: access-key-created
+    match:
+      sources: [aws.cloudtrail]
+      activities: [CreateAccessKey]
+      outcomes: [success]
+      none:
+        - field: actor.id
+          op: regex
+          value: "(?i).*(automation|ci-bot|terraform).*"
+  - name: role-assumed
+    match:
+      sources: [aws.cloudtrail]
+      activities: [AssumeRole]
+      outcomes: [success]
+      none:
+        - field: actor.id
+          op: regex
+          value: "(?i).*(automation|ci-bot|terraform).*"
+runbook:
+  - Confirm who requested the access key and whether a ticket/change window exists.
+  - Compare the source IP and target role with the principal's prior activity.
+  - Rotate or deactivate the new key if ownership cannot be established.
+responses:
+  - action: deactivate_access_key
+    target_field: observables.access_key_id
+    description: Deactivate the newly created key after an analyst confirms compromise.
+    approval_required: true

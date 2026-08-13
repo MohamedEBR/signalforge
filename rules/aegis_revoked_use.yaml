@@ -1,0 +1,39 @@
+id: SF-AEGIS-REVOKED-USE
+version: 1
+name: Workload activity after revocation
+author: Mohamed Ebraheem
+description: Detects a revoked workload attempting a subsequent token exchange.
+type: sequence
+severity: critical
+status: stable
+required_sources: [aegis.audit]
+tactics: [CredentialAccess, Persistence]
+techniques: [T1550.001, T1078]
+false_positives:
+  - An operator intentionally validates that workload revocation is enforced.
+group_by: [actor.id]
+window: 30m
+stages:
+  - name: workload-revoked
+    match:
+      sources: [aegis.audit]
+      activities: [workload_change]
+      outcomes: [success]
+      all:
+        - field: observables.audit_action
+          op: eq
+          value: revoke
+  - name: token-exchange-after-revocation
+    match:
+      sources: [aegis.audit]
+      activities: [token_exchange]
+      outcomes: [failure]
+runbook:
+  - Confirm the revocation and token-exchange event refer to the same workload identity.
+  - Inspect the source host for stale credentials or compromise.
+  - Preserve Aegis audit-chain evidence and rotate related workload certificates.
+responses:
+  - action: rotate_workload_certificate
+    target_field: actor.id
+    description: Rotate the workload certificate after analyst approval and host investigation.
+    approval_required: true

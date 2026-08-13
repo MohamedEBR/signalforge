@@ -1,0 +1,9 @@
+name: AWS access key then cross-role activity
+inputs: [events.jsonl]
+expected_rules: [SF-AWS-ACCESS-KEY-ROLE-CHAIN]
+forbidden_rules:
+  - SF-ENTRA-CA-FAILURE-BURST
+  - SF-ENTRA-PRIVILEGE-SEQUENCE
+  - SF-NETWORK-AUTH-CORRELATION
+  - SF-SENTINELFLOW-CRITICAL
+  - SF-AEGIS-REVOKED-USE

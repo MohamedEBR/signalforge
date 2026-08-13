@@ -1,0 +1,197 @@
+{
+  "$defs": {
+    "Entity": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "title": "Entity",
+      "type": "object"
+    },
+    "ResponsePlan": {
+      "properties": {
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "executable": {
+          "const": false,
+          "default": false,
+          "title": "Executable",
+          "type": "boolean"
+        },
+        "status": {
+          "const": "pending_approval",
+          "default": "pending_approval",
+          "title": "Status",
+          "type": "string"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Target"
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "description"
+      ],
+      "title": "ResponsePlan",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "confidence": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "entities": {
+      "items": {
+        "$ref": "#/$defs/Entity"
+      },
+      "title": "Entities",
+      "type": "array"
+    },
+    "evidence": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "explanation": {
+      "title": "Explanation",
+      "type": "string"
+    },
+    "finding_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Finding Ids",
+      "type": "array"
+    },
+    "first_seen": {
+      "format": "date-time",
+      "title": "First Seen",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "last_seen": {
+      "format": "date-time",
+      "title": "Last Seen",
+      "type": "string"
+    },
+    "response_plans": {
+      "items": {
+        "$ref": "#/$defs/ResponsePlan"
+      },
+      "title": "Response Plans",
+      "type": "array"
+    },
+    "rule_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Rule Ids",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "signalforge.incident.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "severity": {
+      "enum": [
+        "informational",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "tactics": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tactics",
+      "type": "array"
+    },
+    "techniques": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Techniques",
+      "type": "array"
+    },
+    "timeline": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Timeline",
+      "type": "array"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "severity",
+    "confidence",
+    "first_seen",
+    "last_seen",
+    "finding_ids",
+    "rule_ids",
+    "entities",
+    "evidence",
+    "timeline",
+    "tactics",
+    "techniques",
+    "response_plans",
+    "explanation"
+  ],
+  "title": "Incident",
+  "type": "object"
+}

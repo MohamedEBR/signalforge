@@ -1,0 +1,10 @@
+name: SentinelFlow intrusion plus API abuse
+inputs: [events.jsonl]
+expected_rules:
+  - SF-NETWORK-AUTH-CORRELATION
+  - SF-SENTINELFLOW-CRITICAL
+forbidden_rules:
+  - SF-AWS-ACCESS-KEY-ROLE-CHAIN
+  - SF-ENTRA-CA-FAILURE-BURST
+  - SF-ENTRA-PRIVILEGE-SEQUENCE
+  - SF-AEGIS-REVOKED-USE

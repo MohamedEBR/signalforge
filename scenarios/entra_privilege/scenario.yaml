@@ -1,0 +1,10 @@
+name: Entra failures followed by role escalation
+inputs: [events.jsonl]
+expected_rules:
+  - SF-ENTRA-CA-FAILURE-BURST
+  - SF-ENTRA-PRIVILEGE-SEQUENCE
+forbidden_rules:
+  - SF-AWS-ACCESS-KEY-ROLE-CHAIN
+  - SF-NETWORK-AUTH-CORRELATION
+  - SF-SENTINELFLOW-CRITICAL
+  - SF-AEGIS-REVOKED-USE

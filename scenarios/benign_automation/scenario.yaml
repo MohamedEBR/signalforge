@@ -1,0 +1,10 @@
+name: Expected automation and normal sign-in
+inputs: [events.jsonl]
+expected_rules: []
+forbidden_rules:
+  - SF-AWS-ACCESS-KEY-ROLE-CHAIN
+  - SF-ENTRA-CA-FAILURE-BURST
+  - SF-ENTRA-PRIVILEGE-SEQUENCE
+  - SF-NETWORK-AUTH-CORRELATION
+  - SF-SENTINELFLOW-CRITICAL
+  - SF-AEGIS-REVOKED-USE
